@@ -41,20 +41,40 @@ if __name__ == '__main__':
          session.add(var_stock)
          session.commit()    
      elif var1 ['model'] == 'sale':
-         var_sale = Stock (id_stock = var1['fields']['id_stock'],price = var1['fields']['price'],date_sale = var1['fields']['date_sale'], count = var1['fields']['count'])
+         var_sale = Sale (id_stock = var1['fields']['id_stock'],price = var1['fields']['price'],date_sale = var1['fields']['date_sale'], count = var1['fields']['count'])
          session.add(var_sale)
          session.commit()
      
     #  Output publisher
-    
+ 
+ print (f"\n Издатели \n")   
  q = session.query (Publisher)
  for s in q.all():
    print (s.id, s.name)
         
     # Output book
-        
- q = session.query (Book)
+    
+ print (f"\n Книги и кто их издает \n")
+ q = session.query(Publisher).join(Book.con_pub)
  for s in q.all():
-   print (s.id, s.title, s.id_publisher)
+   print (f'Издатель: {s.name}\n')
+   print(f'Издаваемые им книги: \n')
+   for s1 in s.con_book:
+     print (s1.title)  
+   print(f'\n')  
+   
+ print (f'Введите ID издателя, чтоб узнать какие книги он выпускает:')  
+ q = session.query (Publisher)
+ for s in q.all():
+   print (s.id, s.name)
+ var_id_pub = int(input())
+ q = session.query(Publisher).join(Book.con_pub).filter(Publisher.id == var_id_pub)
+ for s in q.all():
+   print (f'Издатель: {s.name}\n')
+   print(f'Издаваемые им книги: \n')
+   for s1 in s.con_book:
+     print (s1.title)  
+   print(f'\n')    
+  
  session.close()
  
