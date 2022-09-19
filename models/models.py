@@ -9,6 +9,9 @@ class Publisher (Base):
     id = sq.Column(sq.Integer, primary_key=True)
     name = sq.Column (sq.String (length=40), unique = True)
     
+    def __str__(self):
+        return f'{self.id}: {self.name}'
+    
 class Book(Base):
     __tablename__ = "book"
     
@@ -42,5 +45,5 @@ class Sale(Base):
     count = sq.Column (sq.Integer)
     
 def create_tables(engine):
-    # Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
