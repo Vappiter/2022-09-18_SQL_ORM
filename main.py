@@ -1,11 +1,19 @@
-from turtle import title
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from models.models import create_tables, Publisher, Book, Shop, Stock, Sale
 import json
 import os
 
-DSN = 'postgresql://postgres:123456@localhost:5432/PythonSQL'
+type_bd = 'postgresql'
+username_bd = 'postgres'
+password_bd = '123456'
+comp_bd = 'localhost'
+port_bd = '5432'
+name_bd = 'PythonSQL'
+
+var_connect_bd = type_bd + '://' + username_bd + ':' + password_bd + '@' + comp_bd + ':' + port_bd + '/' + name_bd
+
+# DSN = 'postgresql://postgres:123456@localhost:5432/PythonSQL'
 
 if __name__ == '__main__':
  
@@ -14,7 +22,7 @@ if __name__ == '__main__':
  with open ('test_data.json',encoding='utf-8') as file_read:
     data_json = json.load(file_read) 
         
- engine = sqlalchemy.create_engine(DSN)
+ engine = sqlalchemy.create_engine(var_connect_bd)
  
  create_tables(engine)
  
@@ -74,7 +82,18 @@ if __name__ == '__main__':
    print(f'Издаваемые им книги: \n')
    for s1 in s.con_book:
      print (s1.title)  
-   print(f'\n')    
-  
+   print(f'\n')   
+
+
+ q = session.query(Publisher).join(Book.con_pub).join(Stock.con_book).join(Shop.con_stock)
+ for s in q.all():
+  print (f'Издатель: {s.name}\n')
+  print(f'Его книги продаются в следующих магазинах: \n')
+  for s1 in s.con_stock:
+    print (s1.name)  
+    print(f'\n')
+
+
+
  session.close()
  
