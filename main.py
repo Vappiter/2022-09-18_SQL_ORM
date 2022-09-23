@@ -85,13 +85,14 @@ if __name__ == '__main__':
    print(f'\n')   
 
 
- q = session.query(Publisher).join(Book.con_pub).join(Stock.con_book).join(Shop.con_stock)
+ q = session.query(Shop.name, Publisher.name).join(Shop.con_stock).join(Stock.con_book).join(Book.con_pub)
  for s in q.all():
-  print (f'Издатель: {s.name}\n')
-  print(f'Его книги продаются в следующих магазинах: \n')
-  for s1 in s.con_stock:
-    print (s1.name)  
-    print(f'\n')
+  print (s)
+  print (f'Издатель: {s.name} {s.name}\n')
+  # print(f'Его книги продаются в следующих магазинах: \n')
+  # for s1 in s.con_shop:
+  #   print (s1.name)  
+  #   print(f'\n')
 
 
 
