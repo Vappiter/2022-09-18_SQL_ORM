@@ -79,22 +79,24 @@ if __name__ == '__main__':
  q = session.query(Publisher).join(Book.con_pub).filter(Publisher.id == var_id_pub)
  for s in q.all():
    print (f'Издатель: {s.name}\n')
-   print(f'Издаваемые им книги: \n')
+   print(f'Издаваемые им книги:')
    for s1 in s.con_book:
      print (s1.title)  
    print(f'\n')   
 
-
+ pub_list ={}
  q = session.query(Shop.name, Publisher.name).join(Shop.con_stock).join(Stock.con_book).join(Book.con_pub)
+#  pub_list = {s[1]: s[0] 
  for s in q.all():
-  print (s)
-  print (f'Издатель: {s.name} {s.name}\n')
-  # print(f'Его книги продаются в следующих магазинах: \n')
-  # for s1 in s.con_shop:
-  #   print (s1.name)  
-  #   print(f'\n')
-
-
+   name_shop, name_pub = s
+   if name_pub not in pub_list.keys():
+    var_list = {name_pub:name_shop}
+    pub_list.update(var_list)
+   else:
+    if name_shop not in pub_list[name_pub]:
+     pub_list[name_pub] = pub_list[name_pub] + ', ' + name_shop
+    
+ print (pub_list) 
 
  session.close()
  
